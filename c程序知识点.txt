@@ -1,0 +1,262 @@
+1.大小端模式：（描述在通信协议字节顺序和计算机存储方式）
+
+高字节  对应  高地址   --------------> 小端模式
+
+高字节  对应  低地址   --------------> 大端模式
+
+
+2.BCD码：用4位二进制数来表示1位十进制中的0~9这10个数码，是一种二进制的数字编码形式，用二进制编码的十进制代码。
+
+
+3.原码、反码、补码：
+
+正数的原码反码补码都一样
+负数：最高位是符号位1，反码是除符号位取反，补码是除符号位反码加1
+
+
+4.重要语句及数据类型：
+
+continue 结束本次循环，开始下一次
+default  其他分支
+enum     枚举
+goto 无条件跳转
+register 声明寄存器变量
+unsigned 无符号类型变量
+signed   声明有符号类型变量
+typedef	用以给数据类型取别名
+union   声明共用体类型
+volatile 意思是“易变的”，应该解释为“直接存取原始内存地址”比较合适 
+告诉编译器不要优化它每次存储或读取需要从内存地址中读。
+
+
+5.左右值：
+左值（lvalue）：指向内存位置的表达式被称为左值（lvalue）表达式。左值可以出现在赋值号的左边或右边。
+右值（rvalue）：术语右值（rvalue）指的是存储在内存中某些地址的数值。右值是不能对其进行赋值的表达式，也就是说，右值可以出现在赋值号的右边，但不能出现在赋值号的左边。
+
+6.函数指针：是一个指针，指针指向的是一个函数；通过把函数指针作为参数传给函数，这叫回调函数。
+int (*func)()
+{
+
+}
+
+指针函数：是一个函数，这个函数返回值是指针。
+int *func()
+{
+ static int *p;
+
+ return p;//返回指针
+}
+注意：C语言不支持在调用函数时返回局部变量的地址，除非定义局部变量为 static 变量
+
+
+7.指针数组：prt是一个数组，由n个指针的元素组成；每个元素都是一个指向int值的指针。
+int val=10;
+
+int *prt[n];
+
+prt[1]=&val;
+
+数组指针：是一个指针，指向数组的指针。
+int (* p)[n] = { };//指向了含n个int类型的数组
+
+eg：
+int temp[3]={1,2,3};
+int (*p)[5]=&temp;//&temp 指的是这整个数组的首地址
+for(int i = 0 i < 3;i++)
+{
+ print("%d\n",*(*p+i));
+}
+
+说明：p所指的是数组temp的地址，
+*p+i 所指的是它在数组中的位置，
+*(*p + i)就表示相应位置上的值了。
+
+
+8.字符串操作函数：
+
+
+9.位域:是一种数据结构，为了节省空间，结构中成员属性利用 ：宽度 限制了成员属性占用空间的二进制位数
+
+eg:
+struct 位域结构名 
+{
+ 
+ 位域列表
+ type [name] :width;
+
+};
+注意：	
+type只能为 int(整型)，unsigned int(无符号整型)，signed int(有符号整型) 三种类型，决定了如何解释位域的值。
+
+name 位域名称（可以不指定）
+
+width 位域中位的数量。宽度必须小于或等于指定类型的位宽度。
+
+
+10.输入/输出
+c把所有的设备都当做文件，所以设备（比如显示器）被处理的方式与文件相同。
+C 语言中的 I/O (输入/输出) 通常使用 printf()发送格式化输出到标准输出（屏幕） 和 scanf()用于从标准输入（键盘）读取并格式化 两个函数。
+
+stdio.h 是一个头文件 (标准输入输出头文件) 
+
+eg：
+int testInteger;
+scanf("%d",&testInteger);
+printf("Number = %d", testInteger);
+
+
+getchar()从标准输入获取字符，与putchar()把字符输出到标准输出上。也是定义在stdio.h之中，只能处理字符，而非字符串（字符实际上是以整数存储）
+
+eg：
+char ch;
+ch = getchar();//向ch输入一个字符,相当于scanf("%c",&ch);
+
+
+char ch = 'a';
+putchar(ch);//与printf("%c",ch);作用相同
+
+/*字符以是整数储存*/
+putchar(ch+1);//输出结果为 b 
+
+
+gets() & puts() 函数
+char *gets(char *s) 函数从 stdin 读取一行到 s 所指向的缓冲区，直到一个终止符或 EOF。
+
+int puts(const char *s) 函数把字符串 s 和一个尾随的换行符写入到 stdout。
+
+
+11.文件读写：
+使用下面函数来创建新文件或打开一个已有的文件，filename是字符串用来命名文件，mode是访问模式。
+FILE *fopen( const char *filename, const char *mode );
+
+int fclose( FILE *fp );
+关闭文件，关闭成功返回0，失败返回EOF，这函数会清空缓冲区数据，关闭文件会释放所有用于改文件所有内存。
+
+写入文件：
+int fputc( int c, FILE *fp );//把字符写入到文件中
+int fputs( const char *s, FILE *fp );//把字符串写到文件中
+
+读取文件：
+int fgetc( FILE * fp );//从文件读取单个字符
+char *fgets( char *buf, int n, FILE *fp );//从文件读取字符串存在buf中
+
+int fscanf(FILE *fp, const char *format, ...) 函数来从文件中读取字符串，但是在遇到第一个空格和换行符时，它会停止读取。
+
+
+
+12.可变参数：函数的参数是可变的，而不是预定义数量的参数，头文件：stdarg.h 
+int func_name(int arg1, ...);//
+
+具体步骤如下：
+
+1.定义一个函数，最后一个参数为省略号，省略号前面可以设置自定义参数。
+2.在函数定义中创建一个 va_list 类型变量，该类型是在 stdarg.h 头文件中定义的。
+va_list valist;
+
+3.使用 int 参数和 va_start() 宏来初始化 va_list 变量为一个参数列表。宏 va_start() 是在 stdarg.h 头文件中定义的。
+va_start(valist, num); /* 为 num 个参数初始化 valist */
+	
+4.使用 va_arg() 宏和 va_list 变量来访问参数列表中的每个项。
+ for()
+ {
+ sum += va_arg(valist, int);
+ }
+ 
+5.使用宏 va_end() 来清理赋予 va_list 变量的内存。 
+va_end(valist); /* 清理为 valist 保留的内存 */
+
+
+
+13.vsnprintf函数的使用
+int vsnprintf (char * sbuf, size_t n, const char * format, va_list arg );
+
+参数sbuf：用于缓存格式化字符串结果的字符数组
+
+参数n：限定最多打印到缓冲区sbuf的字符的个数为n-1个，因为vsnprintf还要在结果的末尾追加\0。如果格式化字符串长度大于n-1，则多出的部分被丢弃。如果格式化字符串长度小于等于n-1，则可以格式化的字符串完整打印到缓冲区sbuf。一般这里传递的值就是sbuf缓冲区的长度。
+
+参数format：格式化限定字符串
+
+参数arg：可变长度参数列表
+
+返回：成功打印到sbuf中的字符的个数，不包括末尾追加的\0。如果格式化解析失败，则返回负数。
+
+
+
+
+
+14.利用函数指针调用函数：扩张性强
+eg：
+#include <stdio.h>
+
+typedef struct //定义一个结构体
+{
+    int  (*func)(int,int);//定义函数指针
+}yun;
+
+//定义函数
+int max(int a,int b)
+{
+	 printf("add:a+b\n");
+	 printf("add=%d+%d\n",a,b);
+	 int c=a+b;
+	 return c;
+}
+
+int sub(int x,int y)
+{
+	printf("Sub:a-b\n");
+	printf("Sub=%d-%d\n",x,y);
+	if (x>y)
+	{
+		 int z=x-y;
+		 return z;
+    }
+}
+//定义结构体的数组里面存放函数名（即函数的地址）
+const yun arr[] =
+{
+	max,sub//要调用的函数名（可扩展）
+};
+
+int main()
+{
+	for (char i = 0; i < sizeof(arr)/sizeof(yun); i++)//遍历结构体数组的函数
+	{
+       int c=arr[i].func(5,3);
+	   printf("Valu = %d\n",c);
+		
+	}
+  
+   return 0;
+}
+
+
+
+
+
+git 笔记：
+
+方法一：
+直接克隆云平台文件下来本地，然后添加文件到仓库，直接上传
+命令1：git clone <服务器地址如：https://github.com/Lsl-Githu/testfile.git>
+
+命令2：git add .               （添加所有文件）
+命令3：git commit -m "提交信息" （提交信息）
+命令4：git push -u origin master  （把本地仓库push 到github上）
+
+
+
+方法二：
+在本地创建仓库，再关联服务器仓库，再上传
+命令1：git init   (初始化仓库)
+命令2：git status （查看仓库状态）
+命令3：git add .   （添加所有文件到仓库）
+命令4：git commit -m "提交信息"  （把项目提交到仓库）
+命令5：ssh-keygen -t rsa -C "youremail@example.com" （创建ssh key注意ssh-keygen之间没有空格）
+第六步：把.push文件中秘钥添加到github上。
+命令7：git remote add origin https://github.com/guyibang/TEST2.git  （关联github仓库）
+命令8：git push -u origin master     (把本地仓库内容推送到远程仓库：由于远程仓库低空的需要加-u)
+
+
+如果你创建远程仓库的时候初始化了仓库，就会有文件：README
+所以需要添加命令：git pull --rebase origin master来合并，在往上推
